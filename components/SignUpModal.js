@@ -1,5 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { SIGNUP_USER } from "@/app/lib/mutations";
 import {
   AiOutlineClose,
   AiOutlineEye,
@@ -15,6 +18,23 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const [signupUser, { loading, error: mutationError }] = useMutation(
+    SIGNUP_USER,
+    {
+      onCompleted: (data) => {
+        // Handle successful signup
+        console.log("User signed up:", data.signup);
+        setSuccess("User created successfully");
+        toggleSignUpModal();
+      },
+      onError: (error) => {
+        // Handle signup error
+        console.error("Signup error:", error.message);
+        setError("Error during signup. Please try again.");
+      },
+    }
+  );
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -27,55 +47,21 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
     }
 
     try {
-      const resUserExists = await fetch("api/userExists", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      // Call the signup mutation
+      await signupUser({
+        variables: {
+          signupInput: {
+            userName: name,
+            email,
+            password,
+          },
         },
-        body: JSON.stringify({ email }),
       });
-
-      const { user } = await resUserExists.json();
-
-      if (user) {
-        setError("User already exists.");
-        return;
-      }
-
-      if (password != confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
-
-      const res = await fetch("api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          confirmPassword,
-        }),
-      });
-
-      if (res.ok) {
-        setName("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setSuccess("User create Successfully");
-        toggleSignUpModal();
-      } else {
-        console.log("user registration failed");
-      }
     } catch (error) {
-      console.log("error occured", error);
+      // Handle general error
+      console.error("Error during signup:", error.message);
+      setError("Error during signup. Please try again.");
     }
-
-    // Close the modal
-    // toggleModal();
   };
 
   return (
@@ -104,7 +90,7 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
           {/* Name field */}
           <input
             type="text"
-            placeholder="Name"
+            placeholder="User Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="bg-[#d4e8ff] rounded-lg py-2 px-10 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"

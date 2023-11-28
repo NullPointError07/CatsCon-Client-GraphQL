@@ -1,9 +1,8 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
-import { AuthProvider } from "./Providers";
+import { AuthProvider } from "./Providers/authProviders";
 import Footer from "@/components/Footer";
-import { ApolloProvider } from "@apollo/client";
-import { graphqlClient } from "./graphql/gql.setup";
+import { ApolloWrapper } from "./lib/apollo-wrapper";
 
 export const metadata = {
   title: "CatsCon",
@@ -14,12 +13,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ApolloProvider client={graphqlClient}>
+        <ApolloWrapper>
           <AuthProvider>
-            <Navbar /> {children}
+            <Navbar />
+            {children}
             <Footer />
           </AuthProvider>
-        </ApolloProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );

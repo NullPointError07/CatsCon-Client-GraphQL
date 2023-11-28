@@ -9,12 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.0-rc.2",
+    "@apollo/client": "^3.8.7",
     "@apollo/experimental-nextjs-app-support": "^0.5.1",
     "@nextui-org/react": "^2.2.9",
     "framer-motion": "^10.16.5",
     "graphql": "^16.8.1",
-    "next": "13.5.4",
+    "js-cookie": "^3.0.5",
+    "next": "^14.0.3",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
     "react": "^18",
