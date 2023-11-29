@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { SIGNUP_USER } from "@/app/lib/mutations";
 import {
   AiOutlineClose,
@@ -15,25 +14,27 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [success, setSuccess] = useState("");
 
-  const [signupUser, { loading, error: mutationError }] = useMutation(
-    SIGNUP_USER,
-    {
-      onCompleted: (data) => {
-        // Handle successful signup
-        console.log("User signed up:", data.signup);
-        setSuccess("User created successfully");
-        toggleSignUpModal();
-      },
-      onError: (error) => {
-        // Handle signup error
-        console.error("Signup error:", error.message);
-        setError("Error during signup. Please try again.");
-      },
-    }
-  );
+  const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
+
+  // if (loading) return "Signing Up...";
+  // if (error) return `SignUp error! ${error.message}`;
+
+  // {
+  //   onCompleted: (data) => {
+  //     // Handle successful signup
+  //     console.log("User signed up:", data.signup);
+  //     setSuccess("User created successfully");
+  //     toggleSignUpModal();
+  //   },
+  //   onError: (error) => {
+  //     // Handle signup error
+  //     console.error("Signup error:", error.message);
+  //     setErrorMsg("Error during signup. Please try again.");
+  //   },
+  // }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -42,26 +43,33 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !password || !confirmPassword) {
-      setError("All fields are required");
-    }
+    // if (!name || !email || !password || !confirmPassword) {
+    //   setErrorMsg("All fields are required");
+    // }
 
-    try {
-      // Call the signup mutation
-      await signupUser({
-        variables: {
-          signupInput: {
-            userName: name,
-            email,
-            password,
-          },
+    // if (password !== confirmPassword) {
+    //   setErrorMsg("Passwords do not match");
+    //   return;
+    // }
+
+    console.log(name, email, password);
+
+    signupUser({
+      variables: {
+        signupInput: {
+          userName: name,
+          email,
+          password,
         },
-      });
-    } catch (error) {
-      // Handle general error
-      console.error("Error during signup:", error.message);
-      setError("Error during signup. Please try again.");
-    }
+      },
+    });
+
+    // try {
+
+    // } catch (error) {
+    //   console.error("Error during signup:", error.message);
+    //   setErrorMsg("Error during signup. Please try again.");
+    // }
   };
 
   return (
@@ -150,9 +158,9 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
             </div>
           </div>
 
-          {error && (
+          {errorMsg && (
             <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-              {error}
+              {errorMsg}
             </div>
           )}
 
