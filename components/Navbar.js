@@ -4,13 +4,14 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-// import { useRouter } from "next/navigation";
+
 import { BsFilePerson } from "react-icons/bs";
+import { FaBars } from "react-icons/fa";
 
 import { useRouter } from "next/navigation";
-import { FaBars } from "react-icons/fa";
 import NavbarResponsive from "./NavbarResponsive";
 import SignInModal from "./SignInModal";
+import { Button } from "@nextui-org/react";
 
 const Navbar = () => {
   const router = useRouter();
@@ -122,25 +123,25 @@ const Navbar = () => {
                     {session?.user?.name}
                   </p>
                 </Link>
-                <button
+                <Button
                   type="button"
                   onClick={() => signOut()}
                   className="btn-primary "
                 >
                   Sign Out
-                </button>
+                </Button>
               </div>
             )}
           </div>
         ) : (
           <>
             <div className="flex gap-3 md:gap-5 items-center">
-              <button
+              <Button
                 onClick={toggleModal}
                 className="btn-primary border-l-2 pl-2"
               >
                 Sign In
-              </button>
+              </Button>
             </div>
           </>
         )}
@@ -153,7 +154,7 @@ const Navbar = () => {
 
       {/* Modal Section for sign In purpose */}
       {modalOpen && (
-        <div className=" absolute left-0 top-0 z-40">
+        <div className="absolute left-0 top-0 z-40">
           <SignInModal modalOpen={modalOpen} toggleModal={toggleModal} />
         </div>
       )}

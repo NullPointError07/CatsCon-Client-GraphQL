@@ -4,6 +4,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import carousalItems from "@/utils/carousalItems";
+import { useMutation } from "@apollo/client";
+import Image from "next/image";
 
 const settings = {
   dots: true,

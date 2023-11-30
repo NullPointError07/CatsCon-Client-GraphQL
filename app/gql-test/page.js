@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic";
 
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { GET_USERS } from "../lib/queries";
+import { GET_USERS } from "../../graphql/queries";
 
 export default function PollPage() {
   const { data } = useSuspenseQuery(GET_USERS);

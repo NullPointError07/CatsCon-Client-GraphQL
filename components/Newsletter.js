@@ -8,7 +8,7 @@ const Newsletter = () => {
           <span>Message Us</span>
         </h1>
         <p className="max-w-md text-xl">
-          We'd love to hear about your experience with us.
+          We would love to hear about your experience with us.
         </p>
       </div>
 

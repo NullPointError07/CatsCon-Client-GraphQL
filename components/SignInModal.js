@@ -9,18 +9,15 @@ import {
 } from "react-icons/ai";
 import SignUpModal from "./SignUpModal";
 import { signIn } from "next-auth/react";
+import { Button } from "@nextui-org/react";
 
 const SignInModal = ({ toggleModal }) => {
-  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [termsAgreed, setTermsAgreed] = useState(false);
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [signUpModal, setSignUpModal] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleTermsAgreedChange = () => {
     setTermsAgreed(!termsAgreed);
@@ -28,10 +25,9 @@ const SignInModal = ({ toggleModal }) => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    console.log("does this work");
 
     if (!email || !password) {
-      setError("All fields are required");
+      setErrorMsg("All fields are required");
     }
 
     try {
@@ -43,7 +39,7 @@ const SignInModal = ({ toggleModal }) => {
       });
 
       if (res.error) {
-        setError("Invalid Credentials");
+        setErrorMsg("Invalid Credentials");
         return;
       }
 
@@ -54,9 +50,6 @@ const SignInModal = ({ toggleModal }) => {
     } catch (error) {
       console.log(error);
     }
-
-    // Close the modal
-    // toggleModal();
   };
 
   const toggleSignUpModal = () => {
@@ -107,12 +100,12 @@ const SignInModal = ({ toggleModal }) => {
             <div className="absolute inset-y-0 right-4 flex items-center">
               {showPassword ? (
                 <AiOutlineEye
-                  onClick={togglePasswordVisibility}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="cursor-pointer"
                 />
               ) : (
                 <AiOutlineEyeInvisible
-                  onClick={togglePasswordVisibility}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="cursor-pointer"
                 />
               )}
@@ -129,14 +122,16 @@ const SignInModal = ({ toggleModal }) => {
             Agreed to terms and conditions
           </label> */}
 
-          {error && (
+          {errorMsg && (
             <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
-              {error}
+              {errorMsg}
             </div>
           )}
 
           <div>
-            <button className="btn-primary">Sign In</button>
+            <Button type="submit" className="btn-primary">
+              Sign In
+            </Button>
           </div>
         </form>
 
@@ -151,12 +146,12 @@ const SignInModal = ({ toggleModal }) => {
         <div>
           <h1>
             Dont Have an Account?{" "}
-            <button
+            <Button
               onClick={toggleSignUpModal}
               className="bg-[#04aeee] p-1 rounded-lg text-white"
             >
               SignUp
-            </button>
+            </Button>
           </h1>
         </div>
 

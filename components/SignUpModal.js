@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { SIGNUP_USER } from "@/app/lib/mutations";
+import { SIGNUP_USER } from "@/graphql/mutations";
 import {
   AiOutlineClose,
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
+import { Button } from "@nextui-org/react";
 
 const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
   const [name, setName] = useState("");
@@ -19,21 +20,8 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
 
   const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
 
-  // if (loading) return "Signing Up...";
-  // if (error) return `SignUp error! ${error.message}`;
-
-  // {
-  //   onCompleted: (data) => {
-  //     // Handle successful signup
-  //     console.log("User signed up:", data.signup);
-  //     setSuccess("User created successfully");
-  //     toggleSignUpModal();
-  //   },
-  //   onError: (error) => {
-  //     // Handle signup error
-  //     console.error("Signup error:", error.message);
-  //     setErrorMsg("Error during signup. Please try again.");
-  //   },
+  // if (error) {
+  //   setErrorMsg(`An Error Occcured ${error}`);
   // }
 
   const togglePasswordVisibility = () => {
@@ -43,33 +31,28 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    // if (!name || !email || !password || !confirmPassword) {
-    //   setErrorMsg("All fields are required");
-    // }
+    if (!name || !email || !password || !confirmPassword) {
+      setErrorMsg("All fields are required");
+    }
 
-    // if (password !== confirmPassword) {
-    //   setErrorMsg("Passwords do not match");
-    //   return;
-    // }
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords do not match");
+      return;
+    }
 
-    console.log(name, email, password);
-
-    signupUser({
-      variables: {
-        signupInput: {
-          userName: name,
-          email,
-          password,
+    try {
+      signupUser({
+        variables: {
+          signupInput: {
+            userName: name,
+            email,
+            password,
+          },
         },
-      },
-    });
-
-    // try {
-
-    // } catch (error) {
-    //   console.error("Error during signup:", error.message);
-    //   setErrorMsg("Error during signup. Please try again.");
-    // }
+      });
+    } catch (error) {
+      setErrorMsg("Error during signup. Please try again.");
+    }
   };
 
   return (
@@ -170,18 +153,20 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
             </div>
           )}
 
-          <button className="btn-primary my-4">Create Account</button>
+          <Button type="submit" className="btn-primary my-4">
+            Create Account
+          </Button>
         </form>
 
         <div className="modal-footer mt-4">
           <h1>
             Already Have an Account?{" "}
-            <button
+            <Button
               onClick={toggleSignUpModal}
               className="bg-[#04aeee] p-1 rounded-lg text-white"
             >
               Sign In
-            </button>
+            </Button>
           </h1>
         </div>
       </div>

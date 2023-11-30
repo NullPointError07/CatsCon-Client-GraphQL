@@ -1,8 +1,9 @@
-import Navbar from "@/components/Navbar";
 import "./globals.css";
-import { AuthProvider } from "./Providers/authProviders";
+import { AuthProvider } from "./Providers/AuthProvider";
+import { ApolloWrapper } from "./Providers/ApolloWrapper";
+import { NextuiProvider } from "./Providers/NextUIProvider";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ApolloWrapper } from "./lib/apollo-wrapper";
 
 export const metadata = {
   title: "CatsCon",
@@ -13,13 +14,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ApolloWrapper>
-          <AuthProvider>
-            <Navbar />
-            {children}
-            <Footer />
-          </AuthProvider>
-        </ApolloWrapper>
+        <NextuiProvider>
+          <ApolloWrapper>
+            <AuthProvider>
+              <Navbar />
+              {children}
+              <Footer />
+            </AuthProvider>
+          </ApolloWrapper>
+        </NextuiProvider>
       </body>
     </html>
   );
