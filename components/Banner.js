@@ -4,7 +4,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import carousalItems from "@/utils/carousalItems";
-import { useMutation } from "@apollo/client";
 import Image from "next/image";
 
 const settings = {
@@ -24,9 +23,11 @@ const Banner = () => {
         <Slider {...settings}>
           {carousalItems.map((item, index) => (
             <div key={index} className="w-full relative ">
-              <img
+              <Image
                 src={item.image}
                 alt={item.header}
+                width={1920}
+                height={1280}
                 className="w-full  rounded-xl"
               />
               <div className="absolute bottom-0 left-0 p-2 md:p-4 lg:p-6 bg-white bg-opacity-80">

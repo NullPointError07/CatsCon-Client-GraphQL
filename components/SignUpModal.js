@@ -10,29 +10,36 @@ import {
 import { Button } from "@nextui-org/react";
 
 const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [success, setSuccess] = useState("");
 
   const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
 
-  // if (error) {
-  //   setErrorMsg(`An Error Occcured ${error}`);
-  // }
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
+    const { name, email, password, confirmPassword } = formData;
+
     if (!name || !email || !password || !confirmPassword) {
       setErrorMsg("All fields are required");
+      return;
     }
 
     if (password !== confirmPassword) {
@@ -41,7 +48,7 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
     }
 
     try {
-      signupUser({
+      await signupUser({
         variables: {
           signupInput: {
             userName: name,
@@ -50,6 +57,7 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
           },
         },
       });
+      setSuccess("Account created successfully!");
     } catch (error) {
       setErrorMsg("Error during signup. Please try again.");
     }
@@ -81,17 +89,19 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
           {/* Name field */}
           <input
             type="text"
-            placeholder="User Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter Your User Name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
             className="bg-[#d4e8ff] rounded-lg py-2 px-10 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           {/* Email field */}
           <input
             type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter Your Email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
             className="bg-[#d4e8ff] rounded-lg py-2 px-10 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           {/* Password field */}
@@ -99,8 +109,9 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               className="py-2 px-10 block w-full rounded-lg bg-[#d4e8ff] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <div className="absolute inset-y-0 right-4 flex items-center">
@@ -122,8 +133,9 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
               className="py-2 px-10 block w-full rounded-lg bg-[#d4e8ff] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <div className="absolute inset-y-0 right-4 flex items-center">
