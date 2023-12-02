@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -12,29 +10,34 @@ import { signIn } from "next-auth/react";
 import { Button } from "@nextui-org/react";
 
 const SignInModal = ({ toggleModal }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
-  const [termsAgreed, setTermsAgreed] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [signUpModal, setSignUpModal] = useState(false);
 
-  const handleTermsAgreedChange = () => {
-    setTermsAgreed(!termsAgreed);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
 
+    const { email, password } = formData;
+
     if (!email || !password) {
       setErrorMsg("All fields are required");
+      return;
     }
 
     try {
       const res = await signIn("credentials", {
         email,
         password,
-        // termsAgreed,
         redirect: false,
       });
 
@@ -83,8 +86,9 @@ const SignInModal = ({ toggleModal }) => {
           <input
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
             className="bg-[#d4e8ff] rounded-lg py-2 px-10 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
@@ -93,8 +97,9 @@ const SignInModal = ({ toggleModal }) => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               className="py-2 px-10 block w-full rounded-lg bg-[#d4e8ff] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <div className="absolute inset-y-0 right-4 flex items-center">
@@ -111,16 +116,6 @@ const SignInModal = ({ toggleModal }) => {
               )}
             </div>
           </div>
-          {/* 
-          <label>
-            <input
-              type="checkbox"
-              checked={termsAgreed}
-              onChange={handleTermsAgreedChange}
-              className="my-4 mr-2"
-            />
-            Agreed to terms and conditions
-          </label> */}
 
           {errorMsg && (
             <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
