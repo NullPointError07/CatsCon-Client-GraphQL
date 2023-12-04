@@ -12,6 +12,7 @@
     "@apollo/client": "^3.8.7",
     "@apollo/experimental-nextjs-app-support": "^0.5.1",
     "@nextui-org/react": "^2.2.9",
+    "axios": "^1.6.2",
     "framer-motion": "^10.16.7",
     "graphql": "^16.8.1",
     "js-cookie": "^3.0.5",

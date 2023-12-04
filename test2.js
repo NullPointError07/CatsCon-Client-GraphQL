@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
-import { GET_USER_BY_EMAIL } from "@/graphql/queries";
+import { GET_USERS } from "@/graphql/queries";
 
 export const authOptions = {
   session: {
@@ -22,35 +22,6 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        const { email, password } = credentials;
-        try {
-          const response = await fetch("http://localhost:3001/graphql", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ GET_USER_BY_EMAIL }),
-            variables: {
-              userEmail: email,
-            },
-          });
-
-          const { data } = await response.json();
-          console.log("ressss", response), console.log("data", data);
-          const user = await data.users.find(
-            (dat) => dat.email === credentials.email
-          );
-          if (user && user.password === credentials.password) {
-            return {
-              _id: user._id,
-              name: user.username,
-              email: user.email,
-            };
-          }
-        } catch (error) {
-          console.error("Login failed:", error.message);
-          throw new Error("Invalid email or password");
-        }
         // try {
         // const response = await axios.post(
         //   // `${process.env.NEXT_PUBLIC_SERVER_URI}`,

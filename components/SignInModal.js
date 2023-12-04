@@ -39,6 +39,7 @@ const SignInModal = ({ toggleModal }) => {
         email,
         password,
         redirect: false,
+        callbackUrl: `${process.env.NEXT_PUBLIC_SERVER_URI}`,
       });
 
       if (res.error) {

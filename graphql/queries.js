@@ -9,3 +9,12 @@ export const GET_USERS = gql`
     }
   }
 `;
+
+export const GET_USER_BY_EMAIL = gql`
+  query UserByEmail($userEmail: String!) {
+    userByEmail(userEmail: $userEmail) {
+      userName
+      email
+    }
+  }
+`;
