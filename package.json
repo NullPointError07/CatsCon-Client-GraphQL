@@ -12,10 +12,8 @@
     "@apollo/client": "^3.8.7",
     "@apollo/experimental-nextjs-app-support": "^0.5.1",
     "@nextui-org/react": "^2.2.9",
-    "axios": "^1.6.2",
     "framer-motion": "^10.16.7",
     "graphql": "^16.8.1",
-    "js-cookie": "^3.0.5",
     "next": "^14.0.3",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
@@ -23,7 +21,8 @@
     "react-dom": "^18",
     "react-icons": "^4.12.0",
     "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.10.1"
   },
   "devDependencies": {
     "autoprefixer": "^10",

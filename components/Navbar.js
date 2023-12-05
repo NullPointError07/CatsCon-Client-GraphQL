@@ -23,6 +23,8 @@ const Navbar = () => {
 
   const { data: session } = useSession();
 
+  console.log("session data", session);
+
   // toggle function for Find Cats
   const toggleDropDown = () => {
     setDropDown(!dropdown);
@@ -120,7 +122,7 @@ const Navbar = () => {
                     onClick={handleProfile}
                     className="text-3xl font-extrabold"
                   >
-                    {session?.user?.name}
+                    {session?.user?.userName}
                   </p>
                 </Link>
                 <Button

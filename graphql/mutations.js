@@ -10,10 +10,15 @@ export const SIGNUP_USER = gql`
   }
 `;
 
-export const LOGIN_USER = gql`
+export const LOGIN_USER = `
   mutation Login($loginUserInput: LoginUserInput!) {
-    login(loginUserInput: $loginUserInput) {
-      authToken
+  login(loginUserInput: $loginUserInput) {
+    user {
+      _id
+      userName
+      email
     }
+    accessToken
   }
+}
 `;

@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import Profile from "@/components/Profile";
 import Swal from "sweetalert2";
 
-import React from "react";
-
 const MyProfile = () => {
   const { data: session } = useSession();
   const router = useRouter();

@@ -1,24 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
-import { GET_USER_BY_EMAIL } from "@/graphql/queries";
+import { LOGIN_USER } from "@/graphql/mutations";
 
 export const authOptions = {
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET_KEY,
-  callbacks: {
-    async session({ session }) {
-      const sessionUser = await User.findOne({ email: session.user.email });
-      session.user.id = sessionUser._id.toString();
-
-      return session;
-    },
-  },
-  pages: {
-    signIn: "/",
-  },
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
@@ -29,66 +13,63 @@ export const authOptions = {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ GET_USER_BY_EMAIL }),
-            variables: {
-              userEmail: email,
-            },
+            body: JSON.stringify({
+              query: LOGIN_USER,
+              variables: {
+                loginUserInput: {
+                  email: email,
+                  password: password,
+                },
+              },
+            }),
           });
 
           const { data } = await response.json();
-          console.log("ressss", response), console.log("data", data);
-          const user = await data.users.find(
-            (dat) => dat.email === credentials.email
-          );
-          if (user && user.password === credentials.password) {
-            return {
-              _id: user._id,
-              name: user.username,
-              email: user.email,
-            };
+
+          console.log("datas..........", data);
+          const user = data?.login?.user;
+
+          if (!user) {
+            throw new Error("Invalid email or password");
           }
+
+          return {
+            user,
+          };
         } catch (error) {
           console.error("Login failed:", error.message);
           throw new Error("Invalid email or password");
         }
-        // try {
-        // const response = await axios.post(
-        //   // `${process.env.NEXT_PUBLIC_SERVER_URI}`,
-        //   "http://localhost:3001/graphql",
-        //   console.log("resssss.....",response),
-        //   {
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({ email, password }),
-        //     // body: JSON.stringify({ GET_USERS }),
-        //   }
-        // );
-        // const { data } = await response.json();
-
-        // const user = await data.users.find(
-        //   (res) => res.email === credentials?.email
-        // );
-        // if (user && user.password === credentials?.password) {
-        const user = {
-          _id: "87632",
-          email: credentials.email,
-          password: credentials.password,
-        };
-        console.log("🚀 ~ file: route.js:56 ~ authorize ~ user:", user);
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
-        // } catch (error) {
-        //   console.error("Login failed:", error.message);
-        //   throw new Error("Invalid email or password");
-        // }
       },
     }),
   ],
+
+  session: {
+    strategy: "jwt",
+  },
+
+  secret: process.env.NEXTAUTH_SECRET_KEY,
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) return { ...token, ...user };
+      console.log("@!!!!!!!!user", user);
+      console.log("@!!!!!!!!token", token);
+      console.log("----------------------");
+      return token;
+    },
+
+    async session({ token, session }) {
+      session.user = token.user;
+      console.log("sessionsssss", session);
+      console.log("tokeeeenssss", token);
+      return session;
+    },
+  },
+
+  pages: {
+    signIn: "/",
+  },
 };
 
 const handler = NextAuth(authOptions);

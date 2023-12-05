@@ -10,9 +10,10 @@ export const GET_USERS = gql`
   }
 `;
 
-export const GET_USER_BY_EMAIL = gql`
+export const GET_USER_BY_EMAIL = `
   query UserByEmail($userEmail: String!) {
     userByEmail(userEmail: $userEmail) {
+      _id
       userName
       email
     }
