@@ -26,8 +26,8 @@ export const authOptions = {
 
           const { data } = await response.json();
 
-          console.log("datas..........", data);
           const user = data?.login?.user;
+          const accessToken = data?.login?.accessToken;
 
           if (!user) {
             throw new Error("Invalid email or password");
@@ -35,6 +35,7 @@ export const authOptions = {
 
           return {
             user,
+            accessToken,
           };
         } catch (error) {
           console.error("Login failed:", error.message);
@@ -53,16 +54,13 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
-      console.log("@!!!!!!!!user", user);
-      console.log("@!!!!!!!!token", token);
-      console.log("----------------------");
       return token;
     },
 
     async session({ token, session }) {
       session.user = token.user;
-      console.log("sessionsssss", session);
-      console.log("tokeeeenssss", token);
+      console.log("sessionssss",session);
+      console.log("tokenssssss",token);
       return session;
     },
   },

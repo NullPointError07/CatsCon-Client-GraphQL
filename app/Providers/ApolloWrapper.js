@@ -1,15 +1,18 @@
 "use client";
 
-import { ApolloLink, HttpLink } from "@apollo/client";
+import { ApolloLink } from "@apollo/client";
+
 import {
   ApolloNextAppProvider,
   NextSSRApolloClient,
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { createUploadLink } from "apollo-upload-client";
+// import { createUploadLink } from "apollo-upload-client";
 
 function makeClient() {
-  const httpLink = new HttpLink({
+  const httpLink = new createUploadLink({
     uri: process.env.NEXT_PUBLIC_SERVER_URI,
   });
 

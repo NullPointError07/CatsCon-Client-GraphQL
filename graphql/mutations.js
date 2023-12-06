@@ -22,3 +22,14 @@ export const LOGIN_USER = `
   }
 }
 `;
+
+export const CREATE_CAT = gql`
+  mutation CreateCat($createCatInput: CreateCatInput!) {
+    createCat(createCatInput: $createCatInput) {
+      title
+      description
+      tags
+      catVideo
+    }
+  }
+`;

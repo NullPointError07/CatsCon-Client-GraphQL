@@ -8,12 +8,15 @@ const Form = ({
   setDescription,
   tag,
   setTag,
+  videoFile,
+  setVideoFile,
+  errorMsg,
+  setErrorMsg,
   submitting,
+  handleChange,
   handleFileChange,
-  handleSubmit
+  handleSubmit,
 }) => {
-  
-
   return (
     <section className="bg-[#f1f7ff] w-full max-w-full grid lg:grid-cols-2 md:grid-cols-1 lg:px-16 md:px-10 sm:px-3 py-20  gap-10">
       <div className="p-12">
@@ -28,7 +31,7 @@ const Form = ({
 
       <div className="border-2 p-12 mx-12 shadow-lg rounded-lg">
         <form
-          onSubmit={handleSubmit}
+          // onSubmit={handleSubmit}
           className=" w-full max-w-2xl flex flex-col gap-7 glassmorphism"
           encType="multipart/form-data"
         >
@@ -38,7 +41,7 @@ const Form = ({
               placeholder="Title"
               name="title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -52,7 +55,7 @@ const Form = ({
               placeholder="Description"
               name="description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-4 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -62,8 +65,9 @@ const Form = ({
             <input
               type="text"
               placeholder="Tags #adorable, #orange, #aww, etc."
+              name="tag"
               value={tag}
-            onChange={(e) => setTag(e.target.value)}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -75,7 +79,7 @@ const Form = ({
               placeholder="Upload Your Video"
               name="file"
               accept=".mp4"
-            onChange={handleFileChange}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               // required
             />
@@ -88,7 +92,8 @@ const Form = ({
 
             <button
               type="submit"
-              disabled={submitting}
+              // disabled={submitting}
+              onClick={handleSubmit}
               className="px-5 py-1.5 text-sm btn-primary rounded-full "
             >
               {submitting ? `${type}ing...` : type}

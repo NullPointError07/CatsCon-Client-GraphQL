@@ -1,6 +1,8 @@
 "use client";
 
 import Form from "@/components/Form";
+import { CREATE_CAT } from "@/graphql/mutations";
+import { useMutation } from "@apollo/client";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -9,56 +11,48 @@ import { useState } from "react";
 const CreateVideo = () => {
   const router = useRouter();
   const { data: session } = useSession();
-
   const [submitting, setSubmitting] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [tag, setTag] = useState("");
-  const [videoFile, setVideoFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    setVideoFile(e.target.files[0]);
+  const [formData, setFormData] = useState();
+
+  const [createCat, { data, loading, error }] = useMutation(CREATE_CAT);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e?.target?.name]: e.target.files ? e.target.files : e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setSubmitting(true);
+    // setSubmitting(true);
 
-    const formData = new FormData();
-    formData.append("userId", session.user.id);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("tag", tag);
-    formData.append("file", videoFile);
-
-    try {
-      const response = await fetch("/api/video/new", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        router.push("/");
-      } else {
-        console.error("Error uploading video.");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    await createCat({
+      variables: {
+        createCatInput: {
+          title: formData?.title,
+          description: formData?.description,
+          tags: formData?.tag,
+          catVideo: formData?.file[0],
+        },
+      },
+      context: {
+        headers: {
+          Autherization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJlZEBnbWFpbC5jb20iLCJuYW1lIjoiUmVkIiwic3ViIjoiNjU1YjJmMjU1MGRiMGUxYjQ1ODVjNzk0IiwiaWF0IjoxNzAwNTQ5NTAxfQ.fynkVTpmVRm8olEDY1ByocPKbvhSRgevB18AwZezPRE",
+          "apollo-require-preflight": true,
+        },
+      },
+    });
   };
 
   return (
     <Form
       type="Create"
-      title={title}
-      setTitle={setTitle}
-      description={description}
-      setDescription={setDescription}
-      tag={tag}
-      setTag={setTag}
       submitting={submitting}
-      handleFileChange={handleFileChange}
+      handleChange={handleChange}
       handleSubmit={handleSubmit}
     />
   );

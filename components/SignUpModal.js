@@ -23,6 +23,8 @@ const SignUpModal = ({ toggleModal, toggleSignUpModal }) => {
 
   const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
 
+  console.log("signupdata", data);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

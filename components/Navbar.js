@@ -23,8 +23,6 @@ const Navbar = () => {
 
   const { data: session } = useSession();
 
-  console.log("session data", session);
-
   // toggle function for Find Cats
   const toggleDropDown = () => {
     setDropDown(!dropdown);
