@@ -9,7 +9,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
       <div className="text-right">
         <h1 className="text-3xl">
           Hello,{" "}
-          <span className="text-[#4e9af0]">{session?.user?.userName}</span>
+          <span className="text-[#4e9af0]">{session?.user?.user?.userName}</span>
         </h1>
         <p className="text-lg">{desc}</p>
         <p className="text-lg">Here are the videos you have uploaded</p>

@@ -14,6 +14,8 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
     setShowVideoModal(!showVideoModal);
   };
 
+  console.log("catsssss", cat);
+
   return (
     <div className="border-2 rounded-xl shadow p-4 hover:shadow-2xl cursor-pointer">
       <div className="relative">
@@ -46,11 +48,12 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
         {cat?.tags}
       </p>
 
-      {session?.user.id === cat?.creator?._id && pathName === "/profile" && (
+      {/* && pathName === "/profile" */}
+      {session?.user?.user?._id === cat?.creator._id && (
         <div className="flex justify-center items-stretch pt-4 space-x-3">
           <p
             className="text-sm bg-green-500 p-1 rounded-lg text-white cursor-pointer"
-            onClick={handleEdit}
+            onClick={() => handleEdit(cat)}
           >
             Edit
           </p>

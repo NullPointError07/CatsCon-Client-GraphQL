@@ -33,3 +33,13 @@ export const CREATE_CAT = gql`
     }
   }
 `;
+
+export const UPDATE_CAT = gql`
+  mutation UpdateCatFromCatDoc($updateCatInput: UpdateCatInput!) {
+    updateCatFromCatDoc(updateCatInput: $updateCatInput) {
+      title
+      tags
+      description
+    }
+  }
+`;

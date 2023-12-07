@@ -40,7 +40,7 @@ const Navbar = () => {
   const navItems = ["Find Cats", "Benefits", "FAQ", "About Us"];
 
   const handleCreateVdo = () => {
-    router.push("/upload-video");
+    router.push("/create-video");
     setDropDown(false);
   };
 
@@ -110,7 +110,7 @@ const Navbar = () => {
             </button>
             {dropdown && (
               <div className="absolute right-0 top-[65px] bg-zinc-300 w-[240px] py-5 rounded-lg flex flex-col gap-3 md:gap-5 items-center">
-                <Link href="/upload-video">
+                <Link href="/create-video">
                   <button onClick={handleCreateVdo} className="btn-primary">
                     Upload Video
                   </button>

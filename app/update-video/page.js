@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
+
+import { UPDATE_CAT } from "@/graphql/mutations";
+import { useMutation } from "@apollo/client";
+
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Button } from "@nextui-org/react";
 
 const UpdateVideo = () => {
   const router = useRouter();
@@ -11,57 +16,40 @@ const UpdateVideo = () => {
   const searchParams = useSearchParams();
   const videoID = searchParams.get("id");
 
+  const [formData, setFormData] = useState();
+
   const [submitting, setSubmitting] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [tag, setTag] = useState("");
 
-  useEffect(() => {
-    const getVideoDetails = async () => {
-      if (videoID) {
-        const response = await fetch(`/api/video/${videoID}`);
-        const data = await response.json();
+  const [updateCat, { data, loading, error }] = useMutation(UPDATE_CAT);
 
-        // Use set functions to update state
-        setTitle(data.title);
-        setDescription(data.description);
-        setTag(data.tag);
-      }
-    };
-
-    getVideoDetails();
-  }, [videoID]);
-
-  // const handleFileChange = (e) => {
-  //   setVideoFile(e.target.files[0]);
-  // };
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e?.target?.name]: e.target.files ? e.target.files : e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setSubmitting(true);
+    // setSubmitting(true);
 
-    const formData = new FormData();
-    formData.append("userId", session.user.id);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("tag", tag);
-    // formData.append("file", videoFile);
-
-    try {
-      const response = await fetch(`/api/video/${videoID}`, {
-        method: "PATCH",
-        body: formData,
-      });
-
-      if (response.ok) {
-        router.push("/");
-      } else {
-        console.error("Error uploading video.");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    await updateCat({
+      variables: {
+        updateCatInput: {
+          title: formData?.title,
+          description: formData?.description,
+          tags: formData?.tag,
+        },
+      },
+      // context: {
+      //   headers: {
+      //     Authorization: `Bearer ${session?.user?.accessToken}
+      //     `,
+      //     "apollo-require-preflight": true,
+      //   },
+      // },
+    });
   };
 
   return (
@@ -87,8 +75,8 @@ const UpdateVideo = () => {
               type="text"
               placeholder="Title"
               name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              // value={title}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -101,8 +89,8 @@ const UpdateVideo = () => {
               type="text"
               placeholder="Description"
               name="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              // value={description}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-4 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -112,8 +100,8 @@ const UpdateVideo = () => {
             <input
               type="text"
               placeholder="Tags #adorable, #orange, #aww, etc."
-              value={tag}
-              onChange={(e) => setTag(e.target.value)}
+              // value={tag}
+              onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -136,13 +124,14 @@ const UpdateVideo = () => {
               Cancel
             </Link>
 
-            <button
+            <Button
               type="submit"
-              disabled={submitting}
+              // disabled={submitting}
+              onClick={handleSubmit}
               className="px-5 py-1.5 text-sm btn-primary rounded-full "
             >
               {submitting ? "Updateing..." : "Update"}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

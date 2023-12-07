@@ -25,6 +25,7 @@ export const GET_CATS = gql`
     catsAll {
       _id
       creator {
+        _id
         userName
       }
       title

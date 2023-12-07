@@ -4,18 +4,10 @@ import Link from "next/link";
 const Form = ({
   type,
   title,
-  setTitle,
   description,
-  setDescription,
   tag,
-  setTag,
-  videoFile,
-  setVideoFile,
-  errorMsg,
-  setErrorMsg,
   submitting,
   handleChange,
-  handleFileChange,
   handleSubmit,
 }) => {
   return (

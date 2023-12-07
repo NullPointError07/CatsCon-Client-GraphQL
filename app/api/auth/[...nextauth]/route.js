@@ -8,21 +8,24 @@ export const authOptions = {
       async authorize(credentials) {
         const { email, password } = credentials;
         try {
-          const response = await fetch("http://localhost:3001/graphql", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              query: LOGIN_USER,
-              variables: {
-                loginUserInput: {
-                  email: email,
-                  password: password,
-                },
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URI}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
               },
-            }),
-          });
+              body: JSON.stringify({
+                query: LOGIN_USER,
+                variables: {
+                  loginUserInput: {
+                    email: email,
+                    password: password,
+                  },
+                },
+              }),
+            }
+          );
 
           const { data } = await response.json();
 
