@@ -11,6 +11,7 @@ import { useState } from "react";
 const CreateVideo = () => {
   const router = useRouter();
   const { data: session } = useSession();
+
   const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState();
@@ -40,8 +41,8 @@ const CreateVideo = () => {
       },
       context: {
         headers: {
-          Autherization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJlZEBnbWFpbC5jb20iLCJuYW1lIjoiUmVkIiwic3ViIjoiNjU1YjJmMjU1MGRiMGUxYjQ1ODVjNzk0IiwiaWF0IjoxNzAwNTQ5NTAxfQ.fynkVTpmVRm8olEDY1ByocPKbvhSRgevB18AwZezPRE",
+          Authorization: `Bearer ${session?.user?.accessToken}
+          `,
           "apollo-require-preflight": true,
         },
       },
@@ -50,7 +51,7 @@ const CreateVideo = () => {
 
   return (
     <Form
-      type="Create"
+      type="Upload"
       submitting={submitting}
       handleChange={handleChange}
       handleSubmit={handleSubmit}

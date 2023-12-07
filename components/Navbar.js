@@ -40,7 +40,7 @@ const Navbar = () => {
   const navItems = ["Find Cats", "Benefits", "FAQ", "About Us"];
 
   const handleCreateVdo = () => {
-    router.push("/create-video");
+    router.push("/upload-video");
     setDropDown(false);
   };
 
@@ -110,9 +110,9 @@ const Navbar = () => {
             </button>
             {dropdown && (
               <div className="absolute right-0 top-[65px] bg-zinc-300 w-[240px] py-5 rounded-lg flex flex-col gap-3 md:gap-5 items-center">
-                <Link href="/create-video">
+                <Link href="/upload-video">
                   <button onClick={handleCreateVdo} className="btn-primary">
-                    Create Video
+                    Upload Video
                   </button>
                 </Link>
                 <Link href="/profile">
@@ -120,7 +120,7 @@ const Navbar = () => {
                     onClick={handleProfile}
                     className="text-3xl font-extrabold"
                   >
-                    {session?.user?.userName}
+                    {session?.user?.user?.userName}
                   </p>
                 </Link>
                 <Button

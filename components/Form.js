@@ -1,3 +1,4 @@
+import { Button } from "@nextui-org/react";
 import Link from "next/link";
 
 const Form = ({
@@ -81,7 +82,7 @@ const Form = ({
               accept=".mp4"
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              // required
+              required
             />
           </label>
 
@@ -90,14 +91,14 @@ const Form = ({
               Cancel
             </Link>
 
-            <button
+            <Button
               type="submit"
               // disabled={submitting}
               onClick={handleSubmit}
               className="px-5 py-1.5 text-sm btn-primary rounded-full "
             >
               {submitting ? `${type}ing...` : type}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
