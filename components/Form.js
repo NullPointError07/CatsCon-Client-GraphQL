@@ -32,7 +32,6 @@ const Form = ({
 
       <div className="border-2 p-12 mx-12 shadow-lg rounded-lg">
         <form
-          // onSubmit={handleSubmit}
           className=" w-full max-w-2xl flex flex-col gap-7 glassmorphism"
           encType="multipart/form-data"
         >

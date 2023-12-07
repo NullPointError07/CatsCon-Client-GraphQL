@@ -19,3 +19,18 @@ export const GET_USER_BY_EMAIL = `
     }
   }
 `;
+
+export const GET_CATS = gql`
+  query CatsAll {
+    catsAll {
+      _id
+      creator {
+        userName
+      }
+      title
+      description
+      tags
+      catVideo
+    }
+  }
+`;
