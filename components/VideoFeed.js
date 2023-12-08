@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import VideoCard from "./VideoCard";
 
 const VideoFeed = () => {
-  const { loading, error, data, refetch } = useQuery(GET_CATS, {
+  const { loading, error, data } = useQuery(GET_CATS, {
     // pollInterval: 500,
   });
   const [deleteCat] = useMutation(DELETE_CAT);

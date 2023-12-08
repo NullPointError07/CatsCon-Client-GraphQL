@@ -23,6 +23,10 @@ const MyProfile = () => {
     if (session?.user.id) fetchPosts();
   }, []);
 
+  // const handleUpdate = async () {
+  //   await 
+  // }
+
   const handleEdit = (post) => {
     router.push(`/update-video?id=${post._id}`);
   };

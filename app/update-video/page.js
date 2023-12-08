@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { UPDATE_CAT } from "@/graphql/mutations";
 import { useMutation, useQuery } from "@apollo/client";
@@ -28,15 +28,20 @@ const UpdateVideo = () => {
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState();
 
   const prevData = data && data?.findCatById;
 
+  const [formData, setFormData] = useState(prevData);
+
+  useEffect(() => {
+    setFormData(prevData);
+  }, [prevData]);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e?.target?.name]: e.target.files ? e.target.files : e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -96,7 +101,7 @@ const UpdateVideo = () => {
               type="text"
               placeholder="Title"
               name="title"
-              value={prevData?.title}
+              value={formData?.title}
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -109,7 +114,7 @@ const UpdateVideo = () => {
               type="text"
               placeholder="Description"
               name="description"
-              value={prevData?.description}
+              value={formData?.description}
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-4 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -119,7 +124,7 @@ const UpdateVideo = () => {
             <input
               type="text"
               placeholder="Tags #adorable, #orange, #aww, etc."
-              value={prevData?.tags[0]}
+              value={formData?.tags[0]}
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />

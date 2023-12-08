@@ -23,6 +23,36 @@ export const LOGIN_USER = `
 }
 `;
 
+export const UPDATE_USER = gql`
+  mutation UpdateUserFromUserDoc($updateUserInput: UpdateUserInput!) {
+    updateUserFromUserDoc(updateUserInput: $updateUserInput) {
+      _id
+      userName
+      email
+      age
+      address
+      bio
+      profilePicture
+    }
+  }
+`;
+
+export const UPDATE_USER_PROFILE_PICTURE = gql`
+  mutation UpdateUserProfilePicture(
+    $updateProfilePicture: UpdateProfilePictureInput!
+  ) {
+    updateUserProfilePicture(updateProfilePicture: $updateProfilePicture) {
+      _id
+      userName
+      email
+      age
+      address
+      bio
+      profilePicture
+    }
+  }
+`;
+
 export const CREATE_CAT = gql`
   mutation CreateCat($createCatInput: CreateCatInput!) {
     createCat(createCatInput: $createCatInput) {
