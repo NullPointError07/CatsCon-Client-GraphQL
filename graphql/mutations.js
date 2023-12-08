@@ -43,3 +43,9 @@ export const UPDATE_CAT = gql`
     }
   }
 `;
+
+export const DELETE_CAT = gql`
+  mutation DeleteCatFromCatDoc($catId: String!) {
+    deleteCatFromCatDoc(catId: $catId)
+  }
+`;

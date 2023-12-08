@@ -14,14 +14,12 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
     setShowVideoModal(!showVideoModal);
   };
 
-  console.log("catsssss", cat);
-
   return (
     <div className="border-2 rounded-xl shadow p-4 hover:shadow-2xl cursor-pointer">
       <div className="relative">
         <video
           className="rounded-xl"
-          src={cat?.catVideo ? `${cat.catVideo}` : "cat-video.mp4"}
+          src={cat?.catVideo ? `${cat?.catVideo}` : "cat-video.mp4"}
         />
         <div className="absolute top-0 left-0 w-full h-full rounded-xl bg-black/30"></div>
         <div className="absolute inset-0 flex justify-center items-center">
@@ -34,9 +32,9 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
           />
         </div>
       </div>
-      <h1 className="text-lg font-medium">
+      {/* <h1 className="text-lg font-medium">
         <span className="text-xs">Uploaded by:</span> {cat?.creator?.userName}
-      </h1>
+      </h1> */}
       <h1 className="text-lg font-bold">{cat?.title}</h1>
       <p className="text-sm font-medium my-4 text-gray-700">
         {cat?.description}
@@ -59,7 +57,7 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
           </p>
           <p
             className="text-sm bg-red-500 p-1 rounded-lg text-white cursor-pointer"
-            onClick={handleDelete}
+            onClick={() => handleDelete(cat)}
           >
             Delete
           </p>

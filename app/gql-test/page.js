@@ -8,7 +8,6 @@ import { GET_USERS } from "../../graphql/queries";
 export default function PollPage() {
   const { data } = useSuspenseQuery(GET_USERS);
 
-  console.log("data", data);
 
   return (
     <div>

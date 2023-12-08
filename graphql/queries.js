@@ -35,3 +35,14 @@ export const GET_CATS = gql`
     }
   }
 `;
+
+export const GET_CAT_BY_ID = gql`
+  query FindCatById($catId: String!) {
+    findCatById(catId: $catId) {
+      _id
+      title
+      description
+      tags
+    }
+  }
+`;

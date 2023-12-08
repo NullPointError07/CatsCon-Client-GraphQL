@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 
+import { useState } from "react";
+
 import { UPDATE_CAT } from "@/graphql/mutations";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import Swal from "sweetalert2";
 import { Button } from "@nextui-org/react";
+import { GET_CAT_BY_ID } from "@/graphql/queries";
 
 const UpdateVideo = () => {
   const router = useRouter();
@@ -16,11 +19,18 @@ const UpdateVideo = () => {
   const searchParams = useSearchParams();
   const videoID = searchParams.get("id");
 
-  const [formData, setFormData] = useState();
+  const [updateCat, { error }] = useMutation(UPDATE_CAT);
+
+  const { data } = useQuery(GET_CAT_BY_ID, {
+    variables: {
+      catId: videoID,
+    },
+  });
 
   const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState();
 
-  const [updateCat, { data, loading, error }] = useMutation(UPDATE_CAT);
+  const prevData = data && data?.findCatById;
 
   const handleChange = (e) => {
     setFormData({
@@ -32,11 +42,12 @@ const UpdateVideo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // setSubmitting(true);
+    setSubmitting(true);
 
     await updateCat({
       variables: {
         updateCatInput: {
+          _id: videoID,
           title: formData?.title,
           description: formData?.description,
           tags: formData?.tag,
@@ -50,6 +61,17 @@ const UpdateVideo = () => {
       //   },
       // },
     });
+
+    if (!error) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Updated Successfully",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      router.push("/");
+    }
   };
 
   return (
@@ -66,7 +88,6 @@ const UpdateVideo = () => {
 
       <div className="border-2 p-12 mx-12 shadow-lg rounded-lg">
         <form
-          onSubmit={handleSubmit}
           className=" w-full max-w-2xl flex flex-col gap-7 glassmorphism"
           encType="multipart/form-data"
         >
@@ -75,10 +96,9 @@ const UpdateVideo = () => {
               type="text"
               placeholder="Title"
               name="title"
-              // value={title}
+              value={prevData?.title}
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
             />
           </label>
 
@@ -89,10 +109,9 @@ const UpdateVideo = () => {
               type="text"
               placeholder="Description"
               name="description"
-              // value={description}
+              value={prevData?.description}
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-4 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
             />
           </label>
 
@@ -100,10 +119,9 @@ const UpdateVideo = () => {
             <input
               type="text"
               placeholder="Tags #adorable, #orange, #aww, etc."
-              // value={tag}
+              value={prevData?.tags[0]}
               onChange={handleChange}
               className="bg-[#d4e8ff] rounded-lg  block w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
             />
           </label>
 
