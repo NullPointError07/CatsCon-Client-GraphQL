@@ -16,7 +16,7 @@ const Profile = ({ name, desc, data }) => {
         <div className="relative">
           <ProfilePicture profilePicture={data?.userById?.profilePicture} />
         </div>
-        <div className="text-right">
+        <div className="text-right w-1/2">
           <h1 className="text-3xl">
             Hello,{" "}
             <span className="text-[#4e9af0]">
@@ -24,7 +24,10 @@ const Profile = ({ name, desc, data }) => {
             </span>
           </h1>
           <p className="text-lg">{desc}</p>
-          <p className="text-lg">Here are the videos you have uploaded</p>
+          <p className="text-lg">{data?.userById?.email}</p>
+          <p className="text-lg">{data?.userById?.age}</p>
+          <p className="text-lg">{data?.userById?.address}</p>
+          {/* <p className="text-lg">{data?.userById?.bio}</p> */}
         </div>
       </div>
       <div className="mt-10 flex justify-end gap-5">
@@ -37,6 +40,9 @@ const Profile = ({ name, desc, data }) => {
 
         <ProfileUpdate data={data?.userById} session={session?.user} />
       </div>
+      <p className="text-lg text-center font-bold mt-10">
+        Here are the videos you have uploaded
+      </p>
       <div className="my-10 grid lg:grid-cols-4 md:grid-cols-2 gap-4 cursor-pointer ">
         {data?.userById?.userVideos?.map((cat) => (
           <VideoCard key={cat._id} cat={cat} />
