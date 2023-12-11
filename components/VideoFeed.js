@@ -1,10 +1,9 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-
 import { GET_CATS } from "@/graphql/queries";
 
-import { Spinner } from "@nextui-org/react";
+import { Pagination, Spinner } from "@nextui-org/react";
 import VideoCard from "./VideoCard";
 
 const VideoFeed = () => {

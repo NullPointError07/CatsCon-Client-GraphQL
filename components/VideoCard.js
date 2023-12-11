@@ -17,8 +17,6 @@ const VideoCard = ({ cat, handleTagClick }) => {
     setShowVideoModal(!showVideoModal);
   };
 
-  console.log("------cat-----------", cat);
-
   return (
     <div className="border-2 rounded-xl shadow p-4 hover:shadow-2xl cursor-pointer">
       <div className="relative">
