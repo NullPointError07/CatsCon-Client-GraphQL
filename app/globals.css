@@ -27,6 +27,10 @@ body {
   color: #04aeee;
 }
 
+.background-theme-1 {
+  background-color: #d4e8ff;
+}
+
 .btn-primary {
   background-color: #04aeee;
   padding: 10px 20px;

@@ -3,7 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsPlayCircle } from "react-icons/bs";
 import VideoPlayModal from "./VideoPlayModal";
-import { useCatActions } from "@/app/hooks/useCatActions";
+import { useCatActions } from "@/hooks/useCatActions";
 
 const VideoCard = ({ cat, handleTagClick }) => {
   const { handleEdit, handleDelete } = useCatActions();
@@ -16,6 +16,8 @@ const VideoCard = ({ cat, handleTagClick }) => {
   const toggleVideoModal = () => {
     setShowVideoModal(!showVideoModal);
   };
+
+  console.log("------cat-----------", cat);
 
   return (
     <div className="border-2 rounded-xl shadow p-4 hover:shadow-2xl cursor-pointer">
@@ -36,7 +38,8 @@ const VideoCard = ({ cat, handleTagClick }) => {
         </div>
       </div>
       <h1 className="text-lg font-medium">
-        <span className="text-xs">Uploaded by:</span> {cat?.creator?.userName}
+        <span className="text-xs">Uploaded by:</span>{" "}
+        {cat?.creator?.userName || session?.user?.user?.userName}
       </h1>
       <h1 className="text-lg font-bold">{cat?.title}</h1>
       <p className="text-sm font-medium my-4 text-gray-700">
