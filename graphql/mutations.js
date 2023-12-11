@@ -42,12 +42,6 @@ export const UPDATE_USER_PROFILE_PICTURE = gql`
     $updateProfilePicture: UpdateProfilePictureInput!
   ) {
     updateUserProfilePicture(updateProfilePicture: $updateProfilePicture) {
-      _id
-      userName
-      email
-      age
-      address
-      bio
       profilePicture
     }
   }

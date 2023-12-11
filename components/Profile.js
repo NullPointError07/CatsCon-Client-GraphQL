@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import {
@@ -12,15 +13,65 @@ import {
 } from "@nextui-org/react";
 import { IoCameraOutline } from "react-icons/io5";
 import VideoCard from "./VideoCard";
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER_PROFILE_PICTURE } from "@/graphql/mutations";
+import Swal from "sweetalert2";
 
-const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
+const Profile = ({ name, desc, data }) => {
   const { data: session } = useSession();
+  const [selectedFile, setSelectedFile] = useState(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    // Handle the selected file as needed
-    console.log("Selected File:", selectedFile);
+  const [updateProfilePic, { error }] = useMutation(
+    UPDATE_USER_PROFILE_PICTURE
+  );
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleProfilePicUpdate = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (!selectedFile) {
+        console.error("No file selected.");
+        return;
+      }
+
+      await updateProfilePic({
+        variables: {
+          updateProfilePicture: {
+            _id: data?.userById?._id,
+            profilePicture: selectedFile,
+          },
+        },
+        context: {
+          headers: {
+            "apollo-require-preflight": true,
+          },
+        },
+      });
+      if (!error) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Profile Picture Successfully",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error Updatting Profile Picture",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
   };
 
   return (
@@ -57,6 +108,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
                     <Input
                       type="file"
                       onChange={handleFileChange}
+                      className="bg-[#d4e8ff] rounded-lg "
                       variant="bordered"
                     />
                   </ModalBody>
@@ -69,7 +121,12 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
                     >
                       Cancel
                     </Button>
-                    <Button size="sm" onPress={onClose} className="btn-primary">
+                    <Button
+                      size="sm"
+                      onPress={onClose}
+                      className="btn-primary"
+                      onClick={handleProfilePicUpdate}
+                    >
                       Save
                     </Button>
                   </ModalFooter>
@@ -89,16 +146,11 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
           <p className="text-lg">Here are the videos you have uploaded</p>
         </div>
       </div>
-      {/* <div className="my-10 grid lg:grid-cols-4 md:grid-cols-2 gap-4 cursor-pointer ">
-        {data.map((post) => (
-          <VideoCard
-            key={post._id}
-            post={post}
-            handleEdit={() => handleEdit && handleEdit(post)}
-            handleDelete={() => handleDelete && handleDelete(post)}
-          />
+      <div className="my-10 grid lg:grid-cols-4 md:grid-cols-2 gap-4 cursor-pointer ">
+        {data?.userById?.userVideos?.map((cat) => (
+          <VideoCard key={cat._id} cat={cat} />
         ))}
-      </div> */}
+      </div>
     </div>
   );
 };

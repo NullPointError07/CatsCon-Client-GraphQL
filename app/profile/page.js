@@ -67,7 +67,6 @@ const MyProfile = () => {
       // handleEdit={handleEdit}
       // handleDelete={handleDelete}
     />
-   
   );
 };
 

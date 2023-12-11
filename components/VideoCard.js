@@ -1,13 +1,16 @@
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsPlayCircle } from "react-icons/bs";
 import VideoPlayModal from "./VideoPlayModal";
+import { useCatActions } from "@/app/hooks/useCatActions";
 
-const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
+const VideoCard = ({ cat, handleTagClick }) => {
+  const { handleEdit, handleDelete } = useCatActions();
   const [showVideoModal, setShowVideoModal] = useState(false);
 
   const { data: session } = useSession();
+  const router = useRouter();
   const pathName = usePathname();
 
   const toggleVideoModal = () => {
@@ -32,9 +35,9 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
           />
         </div>
       </div>
-      {/* <h1 className="text-lg font-medium">
+      <h1 className="text-lg font-medium">
         <span className="text-xs">Uploaded by:</span> {cat?.creator?.userName}
-      </h1> */}
+      </h1>
       <h1 className="text-lg font-bold">{cat?.title}</h1>
       <p className="text-sm font-medium my-4 text-gray-700">
         {cat?.description}
@@ -46,12 +49,11 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
         {cat?.tags}
       </p>
 
-      {/* && pathName === "/profile" */}
-      {session?.user?.user?._id === cat?.creator._id && (
+      {pathName === "/profile" ? (
         <div className="flex justify-center items-stretch pt-4 space-x-3">
           <p
             className="text-sm bg-green-500 p-1 rounded-lg text-white cursor-pointer"
-            onClick={() => handleEdit(cat)}
+            onClick={() => handleEdit(router, cat)}
           >
             Edit
           </p>
@@ -62,6 +64,23 @@ const VideoCard = ({ cat, handleTagClick, handleEdit, handleDelete }) => {
             Delete
           </p>
         </div>
+      ) : (
+        session?.user?.user?._id === cat?.creator._id && (
+          <div className="flex justify-center items-stretch pt-4 space-x-3">
+            <p
+              className="text-sm bg-green-500 p-1 rounded-lg text-white cursor-pointer"
+              onClick={() => handleEdit(router, cat)}
+            >
+              Edit
+            </p>
+            <p
+              className="text-sm bg-red-500 p-1 rounded-lg text-white cursor-pointer"
+              onClick={() => handleDelete(cat)}
+            >
+              Delete
+            </p>
+          </div>
+        )
       )}
 
       {/* Render the VideoModal when showVideoModal is true. */}
