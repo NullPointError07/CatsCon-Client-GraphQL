@@ -5,8 +5,13 @@ import { GET_CATS } from "@/graphql/queries";
 
 import { Pagination, Spinner } from "@nextui-org/react";
 import VideoCard from "./VideoCard";
+import { useState } from "react";
+import SearchBar from "./SearchBar";
 
 const VideoFeed = () => {
+  // search filter states
+  const [searchQuery, setSearchQuery] = useState("");
+
   const { loading, error, data } = useQuery(GET_CATS, {
     // pollInterval: 500,
   });
@@ -15,8 +20,17 @@ const VideoFeed = () => {
     return <p>Error: {error.message}</p>;
   }
 
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+  };
+
   return (
     <>
+      <SearchBar
+        searchText={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearchChange={handleSearchChange}
+      />
       {loading && (
         <div>
           <Spinner className="items-center" size="lg" />
