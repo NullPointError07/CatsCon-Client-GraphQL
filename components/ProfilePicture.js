@@ -32,11 +32,6 @@ const ProfilePicture = ({ profilePicture }) => {
     e.preventDefault();
 
     try {
-      if (!selectedFile) {
-        console.error("No file selected.");
-        return;
-      }
-
       await updateProfilePic({
         variables: {
           updateProfilePicture: {
@@ -114,9 +109,10 @@ const ProfilePicture = ({ profilePicture }) => {
                 </Button>
                 <Button
                   size="sm"
+                  type="submit"
+                  onClick={handleProfilePicUpdate}
                   onPress={onClose}
                   className="btn-primary"
-                  onClick={handleProfilePicUpdate}
                 >
                   Save
                 </Button>

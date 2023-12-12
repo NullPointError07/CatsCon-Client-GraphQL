@@ -16,7 +16,7 @@ const MyProfile = () => {
       userId: sessionUser,
     },
   });
-  console.log("data", data);
+
 
   return <Profile name="user" desc="Welcome to your profile" data={data} />;
 };

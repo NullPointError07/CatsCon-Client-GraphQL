@@ -1,0 +1,162 @@
+"use client";
+
+import Image from "next/image";
+import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import SignUpModal from "@/components/SignUpModal";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@nextui-org/react";
+
+const SignInModal = ({ toggleModal }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [signUpModal, setSignUpModal] = useState(false);
+
+  const router = useRouter();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      setErrorMsg("All fields are required");
+      return;
+    }
+
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: `${process.env.NEXT_PUBLIC_SERVER_URI}`,
+      });
+
+      if (res.error) {
+        setErrorMsg("Invalid Credentials");
+        return;
+      }
+
+      if (res.ok) {
+        toggleModal();
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleSignUpModal = () => {
+    setSignUpModal(!signUpModal);
+  };
+
+  return (
+    <div className="flex justify-center items-center">
+      <div className="bg-[#f8fbff] text-center p-6 relative rounded-lg">
+        <div className="flex flex-col space-y-4">
+          <div className="flex justify-center items-end ">
+            <Image src="/CatsIcon.png" alt="CatsIcon" width={75} height={25} />
+            <h1 className="theme-1 text-2xl font-extrabold">
+              Cats<span className="theme-2">Con</span>
+            </h1>
+          </div>
+          <p className="theme-2">Welcome To CatsCon</p>
+          <p className="text-gray-400 text-xs pb-4">
+            Login to your account - share your adorable cat video
+          </p>
+        </div>
+
+        <form onSubmit={handleSignIn} className="modal-body space-y-4">
+          {/* email field */}
+          <input
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            className="bg-[#d4e8ff] rounded-lg py-2 px-10 block w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required
+          />
+          {/* password field */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="py-2 px-10 block w-full rounded-lg bg-[#d4e8ff] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <div className="absolute inset-y-0 right-4 flex items-center">
+              {showPassword ? (
+                <AiOutlineEye
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer"
+                />
+              ) : (
+                <AiOutlineEyeInvisible
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+          </div>
+
+          {errorMsg && (
+            <div className="bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+              {errorMsg}
+            </div>
+          )}
+
+          <div>
+            <Button type="submit" className="btn-primary">
+              Sign In
+            </Button>
+          </div>
+        </form>
+
+        <div className="modal-footer"></div>
+
+        <div className="flex items-center">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <div className="mx-2">or</div>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
+
+        <div>
+          <h1>
+            Dont Have an Account?{" "}
+            <Button
+              onClick={() => router.push("/signup")}
+              className="bg-[#04aeee] p-1 rounded-lg text-white"
+            >
+              SignUp
+            </Button>
+          </h1>
+        </div>
+
+        {signUpModal && (
+          <div>
+            <SignUpModal
+              toggleModal={toggleModal}
+              toggleSignUpModal={toggleSignUpModal}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SignInModal;

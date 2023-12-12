@@ -66,7 +66,7 @@ const VideoCard = ({ cat, handleTagClick }) => {
           </p>
         </div>
       ) : (
-        session?.user?.user?._id === cat?.creator._id && (
+        session?.user?.user?._id === cat?.creator?._id && (
           <div className="flex justify-center items-stretch pt-4 space-x-3">
             <p
               className="text-sm bg-green-500 p-1 rounded-lg text-white cursor-pointer"

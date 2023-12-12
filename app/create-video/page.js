@@ -7,6 +7,7 @@ import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const CreateVideo = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const CreateVideo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // setSubmitting(true);
+    setSubmitting(true);
 
     await createCat({
       variables: {
@@ -47,6 +48,16 @@ const CreateVideo = () => {
         },
       },
     });
+    if (!error) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Updated Successfully",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      router.push("/");
+    }
   };
 
   return (
